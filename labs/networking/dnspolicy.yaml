@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dnspolicy
+  namespace: default
+spec:
+  containers:
+  - image: nginx:latest 
+    command:
+      - sleep
+      - "3600"
+    name: busybox
+  restartPolicy: Always
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet

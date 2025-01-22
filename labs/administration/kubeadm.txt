@@ -1,0 +1,13 @@
+# kubeadm Commands
+
+# Generate a new token for node join operations
+kubeadm token generate
+
+# Check the expiration of all certificates in the cluster
+sudo kubeadm certs check-expiration
+
+# Obtain the key used to encrypt certificates
+kubeadm certs certificate-key
+
+# Print the default initialization configuration
+kubeadm config print init-defaults

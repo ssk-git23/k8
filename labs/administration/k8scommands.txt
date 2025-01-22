@@ -1,0 +1,77 @@
+# Create a deployment named 'myapp1' with the specified image
+kubectl create deployment myapp1 --image=docker.io/openshift/hello-openshift
+
+# List all pods in the current namespace
+kubectl get pods
+
+# Describe the details of a specific pod
+kubectl describe pod myapp1-57bb57dd79-dz8dg
+
+# List all deployments in the current namespace
+kubectl get deployment
+
+# Describe a specific deployment (replace <deploymentName> with the actual name)
+kubectl describe deployment myapp1 
+# Create a deployment YAML file with dry-run and save it to a file
+kubectl create deployment myhttpd --image=docker.io/httpd --dry-run=client -o yaml > myapp1.yaml
+
+# Edit the deployment YAML file (example uses nano editor)
+nano myapp1.yaml
+
+# Expose the deployment as a service on port 8080
+kubectl expose deployment myapp1 --port=8080
+
+# List all services in the current namespace
+kubectl get svc
+
+# Describe a specific service
+kubectl describe svc myapp1
+
+# Create a namespace named 'mynamespace'
+kubectl create namespace mynamespace
+
+# List all namespaces
+kubectl get namespace
+
+# Create a deployment in a specific namespace
+kubectl create deployment myapp1 --image=docker.io/httpd -n mynamespace
+
+# List deployments in a specific namespace
+kubectl get deployment -n mynamespace
+
+# List pods in a specific namespace
+kubectl get pods -n mynamespace
+
+# Scale a deployment to 3 replicas in a specific namespace
+kubectl scale --replicas=3 deployment myapp1 -n mynamespace
+
+# List deployments in a specific namespace after scaling
+kubectl get deployment -n mynamespace
+
+# List all endpoints in the current namespace
+kubectl get endpoints
+
+# Describe specific endpoints
+kubectl describe endpoints
+
+# Delete a specific deployment
+kubectl delete deployment myapp1
+
+# Delete a specific service
+kubectl delete svc myapp1
+
+# Verify that the service has been deleted
+kubectl get svc
+
+# Delete a specific namespace
+kubectl delete namespace mynamespace
+
+# List recent events in the cluster
+kubectl get events
+
+# List all nodes in the cluster
+kubectl get nodes
+
+# Describe the configuration of a specific node
+kubectl describe node worker-node-1.example.com
+

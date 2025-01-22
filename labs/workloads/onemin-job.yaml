@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: one-minute-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: one-minute-container
+        image: busybox
+        command: ["sh", "-c", "echo 'Job is running'; sleep 60; echo 'Job is done'"]
+      restartPolicy: Never
+  backoffLimit: 2

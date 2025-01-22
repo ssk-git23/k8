@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tolerations-pod-high-priority
+spec:
+  tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "production"
+    effect: "NoSchedule"
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80

@@ -1,0 +1,26 @@
+# Check the expiration date of the cluster's certificates as a regular user
+sudo kubeadm certs check-expiration
+
+# Display basic information about the cluster
+kubectl cluster-info
+
+# Dump detailed cluster information
+kubectl cluster-info dump
+
+# Export the cluster dump information to a file
+kubectl cluster-info dump > kubernetes_cluster_dump
+
+# Create a namespace named 'firstnamespace'
+kubectl create namespace firstnamespace
+
+# List all namespaces in the cluster
+kubectl get namespaces
+
+# View the cluster configuration details
+kubectl config view
+
+# Display the current Kubernetes context
+kubectl config current-context
+
+# Start a proxy to access the API server on port 8080
+kubectl proxy --port=8080

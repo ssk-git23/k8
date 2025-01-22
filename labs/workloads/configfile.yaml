@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testconfig
+spec:
+  containers:
+  - name: test
+    image: docker.io/httpd
+    volumeMounts:
+    - name: config-volume
+      mountPath: /tmp/myenvs/
+  volumes:
+  - name: config-volume
+    configMap:
+      name: example-configmap
+  restartPolicy: Never

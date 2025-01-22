@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: data-sharing-pod
+spec:
+  containers:
+  - name: app-container-1
+    image: nginx
+    volumeMounts:
+    - mountPath: /usr/share/nginx/html
+      name: shared-data
+  - name: app-container-2
+    image: busybox
+    command: ["/bin/sh", "-c", "echo 'Shared data from app-container-2' > /usr/share/nginx/html/index.html && sleep 3600"]
+    volumeMounts:
+    - mountPath: /usr/share/nginx/html
+      name: shared-data
+  volumes:
+  - name: shared-data
+    emptyDir: {}

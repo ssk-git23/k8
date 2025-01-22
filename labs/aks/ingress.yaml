@@ -1,0 +1,145 @@
+# website-namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: website
+---
+# nginx-deployment-1.yaml (Website 1)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-1
+  namespace: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website-1
+  template:
+    metadata:
+      labels:
+        app: website-1
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/index.html
+          name: website-1-html
+          subPath: index.html
+      volumes:
+      - name: website-1-html
+        configMap:
+          name: website-1-html
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: website-1-html
+  namespace: website
+data:
+  index.html: |
+    <html>
+      <head><title>Website 1</title></head>
+      <body><h1>Welcome to Website 1</h1><p>This is the page for /site1 path.</p></body>
+    </html>
+---
+# nginx-deployment-2.yaml (Website 2)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-2
+  namespace: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website-2
+  template:
+    metadata:
+      labels:
+        app: website-2
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/index.html
+          name: website-2-html
+          subPath: index.html
+      volumes:
+      - name: website-2-html
+        configMap:
+          name: website-2-html
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: website-2-html
+  namespace: website
+data:
+  index.html: |
+    <html>
+      <head><title>Website 2</title></head>
+      <body><h1>Welcome to Website 2</h1><p>This is the page for /site2 path.</p></body>
+    </html>
+---
+# nginx-service-1.yaml (Website 1 Service)
+apiVersion: v1
+kind: Service
+metadata:
+  name: website-1-service
+  namespace: website
+spec:
+  selector:
+    app: website-1
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+# nginx-service-2.yaml (Website 2 Service)
+apiVersion: v1
+kind: Service
+metadata:
+  name: website-2-service
+  namespace: website
+spec:
+  selector:
+    app: website-2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+# website-ingress.yaml (Ingress Resource)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: website-ingress
+  namespace: website
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: <external-ip>   # Replace <external-ip> with the external IP or DNS name of your Ingress controller
+    http:
+      paths:
+      - path: /site1
+        pathType: Prefix
+        backend:
+          service:
+            name: website-1-service
+            port:
+              number: 80
+      - path: /site2
+        pathType: Prefix
+        backend:
+          service:
+            name: website-2-service
+            port:
+              number: 80
